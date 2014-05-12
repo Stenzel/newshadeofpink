@@ -49,6 +49,6 @@ int main(void)
 	f = fopen("pink-int.raw","wb");
 	fwrite(ShortNoise,NSMP * sizeof(short),1,f);
 	fclose(f);
-	
+
 	return 0;
 }

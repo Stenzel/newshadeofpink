@@ -11,7 +11,7 @@
 #define PINK_H
 
 // some temporary bias required for hack on floats
-#define PINK_BIAS   440.0f                      
+#define PINK_BIAS   3.0f
 
 class pink
 {
@@ -33,15 +33,15 @@ public:
         *((int *)(out)) = accu;      /* save biased value as float      */\
         accu += inc - dec;           /* integrate                       */\
         lfsr ^= bit & 0x46000001;    /* update lfsr                     */\
-        *out++ += pfira[lfsr & 0x3F] /* add 1st half precalculated FIR  */\
-           + pfirb[lfsr >> 6 & 0x3F] /* add 2nd half, also correts bias */
+        *out += pfira[lfsr & 0x3F];  /* add 1st half precalculated FIR  */\
+        *out++ += pfirb[lfsr>>6 & 0x3F] /* add 2nd half, also correts bias */
 
         int mask = pnmask[pncnt++];    // pncnt is 8 bit for relaxed modulo
- 
-        PINK(mask);   PINK(0x0800); PINK(0x0400); PINK(0x0800);
-        PINK(0x0200); PINK(0x0800); PINK(0x0400); PINK(0x0800);
-        PINK(0x0100); PINK(0x0800); PINK(0x0400); PINK(0x0800);
-        PINK(0x0200); PINK(0x0800); PINK(0x0400); PINK(0x0800);
+
+        PINK(mask);		PINK(0x040000); PINK(0x020000); PINK(0x040000);
+        PINK(0x010000); PINK(0x040000); PINK(0x020000); PINK(0x040000);
+        PINK(0x008000); PINK(0x040000); PINK(0x020000); PINK(0x040000);
+        PINK(0x010000); PINK(0x040000); PINK(0x020000); PINK(0x040000);
         
         pinc    =   inc;                        // write back variables
         pdec    =   dec;
@@ -54,12 +54,12 @@ public:
         plfsr  = 0x5EED41F5 + instance_cnt++;   // seed for lfsr, decorrelate multiple instances
         *((float *)(&paccu))  = PINK_BIAS;      // init float hack
         pncnt = 0;                              // counter from zero    
-        pinc   = 0x0CCC;                        // balance initial states to avoid DC 
-        pdec   = 0x0CCC;
+        pinc   = 0x04CCCC;                      // balance initial states to avoid DC 
+        pdec   = 0x04CCCC;        
     };  
     
 private:    
-    static const unsigned char pnmask[256];     // lookup for bitrversed masks
+    static const unsigned int pnmask[256];      // lookup for bitrversed masks
     static const float pfira[64];               // 1st precalculated FIR lookup table
     static const float pfirb[64];               // 2nd precalculated FIR lookup table, also for bias correction
     static int instance_cnt;                    // used for decorrelation in case of multiple instances
