@@ -608,7 +608,7 @@ function noisectl()
     }
 }
 
-document.write('<canvas id="c3" width="850" height="400"></canvas>\n');
+document.write('<canvas id="c3" width="650" height="300"></canvas>\n');
 
 var cv = document.getElementById('c3');
 var cx = cv.getContext('2d');
