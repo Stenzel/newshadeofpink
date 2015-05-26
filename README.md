@@ -4,10 +4,10 @@ A New Shade of Pink
 A new recipe for generation of high quality pink noise. 
 Although this is a multirate algorithm, it requires very few operations,
 neither multiplication, division nor transcendental functions are used. 
-
+<!---
 The repository contains a detailed description, here a demonstration with audio that allows selective control of the individual multirate components.
 Just hit Play! and enjoy:
-   
+-->   
     
 <script>
 var draw = 0;
