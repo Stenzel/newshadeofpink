@@ -16,26 +16,30 @@
 #include "pink.h"
 #include "pink-int.h"
 #include "pink-low.h"
+#include "pink52.h"
 
 #include <stdio.h>
 
 #define NSMP	0x40000
 
 float PinkNoise[NSMP];
-float  LowNoise[NSMP];
+float LowNoise[NSMP];
 short ShortNoise[NSMP];
+float Pink52Noise[NSMP];
 
 int main(void)
 {
 	pink    p;
 	pinklow pl;
 	pinkint pi;
+	pink52 p52;
 	
 	for(int i=0; i<NSMP; i+=16)
 	{
 		p.generate16(PinkNoise+i);
 		pl.generate16(LowNoise+i);
 		pi.generate16(ShortNoise+i);
+		p52.generate16(Pink52Noise+i);
 	}
 	
 	FILE *f = fopen("pink.raw","wb");
@@ -48,6 +52,10 @@ int main(void)
 	
 	f = fopen("pink-int.raw","wb");
 	fwrite(ShortNoise,NSMP * sizeof(short),1,f);
+	fclose(f);
+
+	f = fopen("pink52.raw","wb");
+	fwrite(Pink52Noise,NSMP * sizeof(float),1,f);
 	fclose(f);
 
 	return 0;
