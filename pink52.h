@@ -35,7 +35,7 @@ public:
 		lfsr ^= bit &  0xA800000000000001ll; /* update lfsr             */\
         *out++ = (accu +              /* save output                     */\
              pfira[lfsr & 0x3F] +    /* add 1st half precalculated FIR  */\
-             pfirb[lfsr >> 6 & 0x3F]) * 0x1p-59f; /* add 2nd half and discard low bits */
+             pfirb[lfsr >> 6 & 0x3F]) * 0x1p-57f; /* add 2nd half and discard low bits */
 
         long long pindex = pncnt++;
         int shiftcnt = 0;
