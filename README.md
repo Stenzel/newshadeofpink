@@ -9,7 +9,7 @@ The repository contains a detailed description, here a demonstration with audio 
 Just hit Play! and enjoy:
 -->   
     
-<script>
+<script type="text/javascript">
 var draw = 0;
 var img;
 

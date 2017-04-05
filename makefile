@@ -9,3 +9,9 @@ testpink:	pink.h pink.cpp pink-int.h pink-int.cpp pink-low.h pink-low.cpp pink52
 
 clean:		
 			rm -f testpink *.raw
+
+test-try:	pink-try.h pink-try.cpp test-try.cpp
+			g++ test-try.cpp pink-try.cpp -o test-try
+			
+
+
