@@ -1,6 +1,8 @@
 # makefile for new shade of pink testsuite
+# (c) 2014 Stefan Stenzel 
+# stefan at ioptigan.com
 
-pink.raw:	testpink
+pink.wav:	testpink
 			./testpink
 
 testpink:	pink.h pink.cpp pink-int.h pink-int.cpp pink-low.h pink-low.cpp pink52.h \
@@ -8,10 +10,8 @@ testpink:	pink.h pink.cpp pink-int.h pink-int.cpp pink-low.h pink-low.cpp pink52
 			g++ testpink.cpp pink.cpp pink-int.cpp pink-low.cpp pink52.cpp -o testpink
 
 clean:		
-			rm -f testpink *.raw
+			rm -f testpink *.raw *.wav
 
-test-try:	pink-try.h pink-try.cpp test-try.cpp
-			g++ test-try.cpp pink-try.cpp -o test-try
 			
 
 
