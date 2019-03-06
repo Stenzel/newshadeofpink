@@ -1,16 +1,16 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // New Shade of Pink
 // (c) 2014 Stefan Stenzel 
-// stefan at waldorfmusic.de
+// stefan at ioptigan.com
 //  
 // Simple Test for pink noise generators
 //
-// outputs three files when run:
-// pink.raw			pink noise as 32 bit float
-// pink-low.raw		same as above with more low frequency content
-// pink-int.raw     pink noise as 16-bi int
+// outputs four files when run:
+// pink.wav         pink noise as 32 bit float
+// pink-low.wav     same as above with more low frequency content
+// pink-short.wav   pink noise as 16-bit int
+// pink52.wav       pink noise from 52 individual octave spaced generators
 //
-// load as raw data into audacity for verification
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #include "pink.h"
@@ -20,43 +20,50 @@
 
 #include <stdio.h>
 
-#define NSMP	0x40000
+#define NSMP    0x40000
 
 float PinkNoise[NSMP];
 float LowNoise[NSMP];
 short ShortNoise[NSMP];
 float Pink52Noise[NSMP];
 
+void float2wav(float *smp, int n, int rate, const char *wavname)    // quick & dirty wav writer 
+{
+    int head[] = {'FFIR',4*n+36,'EVAW',' tmf',16,0x10003,rate,4*rate,0x200004,'atad',4*n};
+    FILE *f = fopen(wavname,"wb"); 
+    fwrite(&head,44,1,f); 
+    fwrite(smp,n,4,f); 
+    fclose(f);
+}
+
+void short2wav(short *smp, int n, int rate, const char *wavname)    // same for 16 bit values
+{
+    int head[] = {'FFIR',2*n+36,'EVAW',' tmf',16,0x10001,rate,2*rate,0x100002,'atad',2*n};
+    FILE *f = fopen(wavname,"wb"); 
+    fwrite(&head,44,1,f); 
+    fwrite(smp,n,2,f); 
+    fclose(f);
+}
+
 int main(void)
 {
-	pink    p;
-	pinklow pl;
-	pinkint pi;
-	pink52 p52;
-	
-	for(int i=0; i<NSMP; i+=16)
-	{
-		p.generate16(PinkNoise+i);
-		pl.generate16(LowNoise+i);
-		pi.generate16(ShortNoise+i);
-		p52.generate16(Pink52Noise+i);
-	}
-	
-	FILE *f = fopen("pink.raw","wb");
-	fwrite(PinkNoise,NSMP * sizeof(float),1,f);
-	fclose(f);
-	
-	f = fopen("pink-low.raw","wb");
-	fwrite(LowNoise,NSMP * sizeof(float),1,f);
-	fclose(f);
-	
-	f = fopen("pink-int.raw","wb");
-	fwrite(ShortNoise,NSMP * sizeof(short),1,f);
-	fclose(f);
-
-	f = fopen("pink52.raw","wb");
-	fwrite(Pink52Noise,NSMP * sizeof(float),1,f);
-	fclose(f);
-
-	return 0;
+    pink    pinknoise;
+    pinklow plownoise;
+    pinkint shortnoise;
+    pink52  p52octaves;
+    
+    for(int i=0; i<NSMP; i+=16)
+    {
+        pinknoise.generate16(PinkNoise+i);
+        plownoise.generate16(LowNoise+i);
+        shortnoise.generate16(ShortNoise+i);
+        p52octaves.generate16(Pink52Noise+i);
+    }
+    
+    float2wav(PinkNoise,NSMP,44100,"pink.wav");
+    float2wav(LowNoise,NSMP,44100,"pink-low.wav");
+    float2wav(Pink52Noise,NSMP,44100,"pink52.wav");
+    short2wav(ShortNoise,NSMP,44100,"pink-short.wav");
+    
+    return 0;
 }
