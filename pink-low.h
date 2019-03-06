@@ -1,7 +1,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // New Shade of Pink
 // (c) 2014 Stefan Stenzel 
-// stefan at waldorfmusic.de
+// stefan at ioptigan.com
 //  
 // This variant sums 20 octave spaced noise sources
 // Terms of use:
@@ -15,6 +15,8 @@
 // some temporary bias required for hack on floats
 #define PINKLOW_BIAS    1.5f                        
 
+#include "floathack.h"
+
 class pinklow
 {
 public: 
@@ -22,9 +24,10 @@ public:
     {                                           // requires an adaptor if less are wanted
         register int inc    =   pinc;           // load old fashioned register variables-
         register int dec    =   pdec;           // as ugly as this might seem, it improves 
-        register int accu   =   paccu;          // the generated code for most compilers
+        register floathack accu   =   paccu;          // the generated code for most compilers
         register int lfsr   =   plfsr;
         register int bit;
+        register float sample;
                                                 
 #define PLOW(bitmask)                /* macro for processing:           */\
         bit = lfsr >> 31;            /* spill random to all bits        */\
@@ -32,11 +35,12 @@ public:
         lfsr <<= 1;                  /* shift lfsr                      */\
         dec |= inc & bitmask;        /* copy increment to decrement bit */\
         inc ^= bit & bitmask;        /* new random bit                  */\
-        *((int *)(out)) = accu;      /* save biased value as float      */\
+        sample = accu;               /* save biased value as float      */\
         accu += inc - dec;           /* integrate                       */\
         lfsr ^= bit & 0x46000001;    /* update lfsr                     */\
-        *out++ += pfira[lfsr & 0x3F] /* add 1st half precalculated FIR  */\
-           + pfirb[lfsr >> 6 & 0x3F] /* add 2nd half, also correts bias */
+        *out++ = sample                  /* save output and ...              */\
+             + pfira[lfsr & 0x3F]        /* add 1st half FIR & subtract bias */\
+             + pfirb[lfsr>>6 & 0x3F]     /* add 2nd half precalculated FIR.  */ 
 
         int mask = pnmask[pncnt++];             // pncnt is 8 bit for relaxed modulo
         if(!mask) mask = pnmask[plcnt++]>>8;    // rarely update lowest
@@ -54,8 +58,8 @@ public:
     
     pinklow()                                       // constructor  
     {
-        plfsr  = 0xB0B0FACE + instance_cnt++;   // anything but zero, decorrelate multiple instances
-        *((float *)(&paccu))  = PINKLOW_BIAS;   // init float hack
+        plfsr  = 0xFEEED1F5 + instance_cnt++;   // anything but zero, decorrelate multiple instances
+        paccu  = PINKLOW_BIAS;   // init float hack
         pncnt = plcnt = 0;                      // counter from zero    
         pinc   = 0x04CCCC;                      // balance initial states to avoid DC 
         pdec   = 0x04CCCC;
@@ -69,7 +73,7 @@ private:
     int plfsr;                                  // linear feedback shift register
     int pinc;                                   // increment for all noise sources (bits)
     int pdec;                                   // decrement for all noise sources
-    int paccu;                                  // accu, also interpreted as float
+    float paccu;                                // accu, also interpreted as int
     unsigned char pncnt;                        // overflowing counter as index to pnmask[]
     unsigned char plcnt;
 };

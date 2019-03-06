@@ -1,7 +1,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // New Shade of Pink
 // (c) 2014 Stefan Stenzel
-// stefan at waldorfmusic.de
+// stefan at ioptigan.com
 //  
 // Terms of use:
 // Use for any purpose. If used in a commercial product, you should give me one.  

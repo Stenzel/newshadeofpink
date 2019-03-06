@@ -1,7 +1,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // New Shade of Pink
 // (c) 2014 Stefan Stenzel 
-// stefan at waldorfmusic.de
+// stefan at ioptigan.com
 //  
 // Terms of use:
 // Use for any purpose. If used in a commercial product, you should give me one.  
@@ -13,7 +13,7 @@
 // some temporary bias required for hack on floats
 #define PINK_BIAS   3.0f
 
-typedef union {float f; int i;} fi32;
+#include "floathack.h"
 
 class pink
 {
@@ -22,25 +22,27 @@ public:
     {                                           // requires an adaptor if less are wanted
         register int inc    =   pinc;           // load old fashioned register variables-
         register int dec    =   pdec;           // as ugly as this might seem, it improves 
-        register fi32 accu  =   paccu;          // the generated code for most compilers
+        register floathack accu  =   paccu;          // the generated code for most compilers
         register int lfsr   =   plfsr;
         register int bit;
+        register float sample;
         
-#define PINK(bitmask)                   /* macro for processing:            */\
-        bit = lfsr >> 31;               /* spill random to all bits         */\
-        dec &= ~bitmask;                /* blank old decrement bit          */\
-        lfsr <<= 1;                     /* shift lfsr                       */\
-        dec |= inc & bitmask;           /* copy increment to decrement bit  */\
-        inc ^= bit & bitmask;           /* new random bit                   */\
-        *out = accu.f;     			    /* save biased value as float       */\
-        accu.i += inc - dec;            /* integrate                        */\
-        lfsr ^= bit & 0x46000001;       /* update lfsr                      */\
-        *out += pfira[lfsr & 0x3F];     /* add 1st half FIR & subtract bias */\
-        *out++ += pfirb[lfsr>>6 & 0x3F] /* add 2nd half precalculated FIR.  */        
+#define PINK(bitmask)                    /* macro for processing:            */\
+        bit = lfsr >> 31;                /* spill random to all bits         */\
+        dec &= ~bitmask;                 /* blank old decrement bit          */\
+        lfsr <<= 1;                      /* shift lfsr                       */\
+        dec |= inc & bitmask;            /* copy increment to decrement bit  */\
+        inc ^= bit & bitmask;            /* new random bit                   */\
+        sample = accu;                   /* copy value as float              */\
+        accu  += inc - dec;              /* integrate                        */\
+        lfsr ^= bit & 0x46000001;        /* update lfsr                      */\
+        *out++ = sample                  /* save output and ...              */\
+             + pfira[lfsr & 0x3F]        /* add 1st half FIR & subtract bias */\
+             + pfirb[lfsr>>6 & 0x3F]     /* add 2nd half precalculated FIR.  */        
 
         int mask = pnmask[pncnt++];    // pncnt is 8 bit for relaxed modulo
 
-        PINK(mask);		PINK(0x040000); PINK(0x020000); PINK(0x040000);
+        PINK(mask);     PINK(0x040000); PINK(0x020000); PINK(0x040000);
         PINK(0x010000); PINK(0x040000); PINK(0x020000); PINK(0x040000);
         PINK(0x008000); PINK(0x040000); PINK(0x020000); PINK(0x040000);
         PINK(0x010000); PINK(0x040000); PINK(0x020000); PINK(0x040000);
@@ -53,9 +55,8 @@ public:
     
     pink()                                      // constructor  
     {
-        plfsr  = 0x5EED41F5 + instance_cnt++;   // seed for lfsr, decorrelate multiple instances
-//        *((float *)(&paccu))  = PINK_BIAS;      // init float hack
-		paccu.f = PINK_BIAS;
+        plfsr  = 0x5EED41F5 + instance_cnt++;   // seed for lfsr, decorrelate multiple instances    
+        paccu  = PINK_BIAS;                 // init float hack
         pncnt = 0;                              // counter from zero    
         pinc   = 0x04CCCC;                      // balance initial states to avoid DC 
         pdec   = 0x04CCCC;        
@@ -69,8 +70,7 @@ private:
     int plfsr;                                  // linear feedback shift register
     int pinc;                                   // increment for all noise sources (bits)
     int pdec;                                   // decrement for all noise sources
-    fi32 paccu;                                 // accu, also interpreted as float
-
+    float paccu;                                // accu, also interpreted as int
     unsigned char pncnt;                        // overflowing counter as index to pnmask[]
 };
 

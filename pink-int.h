@@ -1,7 +1,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // New Shade of Pink
 // (c) 2014 Stefan Stenzel 
-// stefan at waldorfmusic.de
+// stefan at ioptigan.com
 //  
 // This variant generates 16-bit integer output
 // Terms of use:
@@ -49,7 +49,7 @@ public:
     
     pinkint()                                   // constructor  
     {
-        plfsr  = 0x5EED41F5 + instance_cnt++;   // anything but zero, decorrelate multiple instances
+        plfsr  = 0x5EEED1F5 + instance_cnt++;   // anything but zero, decorrelate multiple instances
         paccu  = 0;
         pncnt  = 0;                             // counter from zero    
         pinc   = 0x0CCC;                        // balance initial states to avoid DC 
