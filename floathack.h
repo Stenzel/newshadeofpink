@@ -6,10 +6,9 @@
 
 union floathack
 {
-	float f;
-	int i;
-	floathack(float a) { f = a;}
-	//floathack& operator +=(const int &a)   { i += a; return *this; }
-	void operator +=(const int &a)   { i += a; }
-	operator  float() const	{ return f; }
+    float f;
+    int i;
+    floathack(float a)             { f  = a; }
+    void operator +=(const int a)  { i += a; }
+    operator float() const         {return f;}
 };
