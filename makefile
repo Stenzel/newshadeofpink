@@ -6,7 +6,7 @@ SRC		= pink.cpp pink-int.cpp pink-low.cpp pink52.cpp testpink.cpp
 INC		= pink.h pink-int.h pink-low.h pink52.h floathack.h
 
 #c++20 for std::bit_cast, else uses a union which works but is undefined behaviour.
-OPT		= -std=c++20 -Wno-narrowing -O2
+OPT		= -std=c++20 -O2
 
 pink.wav:	testpink
 			./testpink

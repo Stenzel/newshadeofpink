@@ -16,7 +16,7 @@ int pinkint::instance_cnt = 0;
 // Let preprocessor and compiler calculate two lookup tables for 12-tap FIR Filter with these coefficients:
 // 1.190566,0.162580,0.002208,0.025475,-0.001522,0.007322,0.001774,0.004529,-0.001561,0.000776,-0.000486,0.002017
 
-#define F(cf,m,shift)   (2048*cf*(2*((m)>>shift&1)-1))
+#define F(cf,m,shift)   (const int)(2048*cf*(2*((m)>>shift&1)-1))
 
 #define FA(n)   F(1.190566,n,0)+F(0.162580,n,1)+F(0.002208,n,2)+ F(0.025475,n,3)+F(-0.001522,n,4)+F(0.007322,n,5)       
 #define FB(n)   F(0.001774,n,0)+F(0.004529,n,1)+F(-0.001561,n,2)+F(0.000776,n,3)+F(-0.000486,n,4)+F(0.002017,n,5)

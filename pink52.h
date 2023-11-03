@@ -33,7 +33,7 @@ public:
         inc ^= bit & bitmask;        /* new random bit                  */\
         accu += inc - dec;           /* integrate                       */\
         lfsr ^= bit &  0xA800000000000001ll; /* update lfsr             */\
-        *out++ = (accu +              /* save output                     */\
+        *out++ = (accu +              /* save output                    */\
              pfira[lfsr & 0x3F] +    /* add 1st half precalculated FIR  */\
              pfirb[lfsr >> 6 & 0x3F]) * 0x1p-57f; /* add 2nd half and discard low bits */
 
