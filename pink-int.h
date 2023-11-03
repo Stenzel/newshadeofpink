@@ -16,11 +16,11 @@ class pinkint
 public: 
     void generate16(short *out)                 // generate 16 samples of pink noise
     {
-        register int inc    =   pinc;           // load old fashioned register variables-
-        register int dec    =   pdec;           // as ugly as this might seem, it improves 
-        register int accu   =   paccu;          // the generated code for most compilers
-        register int lfsr   =   plfsr;
-        register int bit;
+         int inc    =   pinc;           // load old fashioned  variables-
+         int dec    =   pdec;           // as ugly as this might seem, it improves 
+         int accu   =   paccu;          // the generated code for most compilers
+         int lfsr   =   plfsr;
+         int bit;
                                                 
 #define PINT(bitmask)                /* macro for processing:           */\
         bit = lfsr >> 31;            /* spill random to all bits        */\
@@ -61,7 +61,7 @@ private:
     static const int pfira[64];                 // 1st precalculated FIR lookup table
     static const int pfirb[64];                 // 2nd precalculated FIR lookup table
     static int instance_cnt;                    // used for decorrelation in case of multiple instances
-    int plfsr;                                  // linear feedback shift register
+    int plfsr;                                  // linear feedback shift 
     int pinc;                                   // increment for all noise sources (bits)
     int pdec;                                   // decrement for all noise sources
     int paccu;                                  // accu

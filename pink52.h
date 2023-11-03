@@ -18,11 +18,11 @@ class pink52
 public: 
     void generate16(float *out)                     // generate 16 samples of pink noise
     {                                               // requires an adaptor if less are wanted
-        register long long inc  =   pinc;           // load old fashioned register variables-
-        register long long dec  =   pdec;           // as ugly as this might seem, it seems to
-        register long long accu =   paccu;          // improve code for most compilers.
-        register long long lfsr =   plfsr;
-        register long long bit;
+         long long inc  =   pinc;           // load old fashioned  variables-
+         long long dec  =   pdec;           // as ugly as this might seem, it seems to
+         long long accu =   paccu;          // improve code for most compilers.
+         long long lfsr =   plfsr;
+         long long bit;
             
                                                 
 #define PINK52(bitmask)              /* macro for processing:           */\
@@ -74,7 +74,7 @@ private:
     static const long long pfira[64];                 // 1st precalculated FIR lookup table
     static const long long pfirb[64];                 // 2nd precalculated FIR lookup table
     static int instance_cnt;                    // used for decorrelation in case of multiple instances
-    long long plfsr;                            // linear feedback shift register
+    long long plfsr;                            // linear feedback shift 
     long long pinc;                             // increment for all noise sources (bits)
     long long pdec;                             // decrement for all noise sources
     long long paccu;                            // accu

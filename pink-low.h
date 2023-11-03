@@ -22,12 +22,12 @@ class pinklow
 public: 
     void generate16(float *out)                 // generate 16 samples of pink noise
     {                                           // requires an adaptor if less are wanted
-        register int inc    =   pinc;           // load old fashioned register variables-
-        register int dec    =   pdec;           // as ugly as this might seem, it improves 
-        register floathack accu   =   paccu;          // the generated code for most compilers
-        register int lfsr   =   plfsr;
-        register int bit;
-        register float sample;
+         int inc    =   pinc;           // load old fashioned  variables-
+         int dec    =   pdec;           // as ugly as this might seem, it improves 
+         floathack accu   =   paccu;          // the generated code for most compilers
+         int lfsr   =   plfsr;
+         int bit;
+         float sample;
                                                 
 #define PLOW(bitmask)                /* macro for processing:           */\
         bit = lfsr >> 31;            /* spill random to all bits        */\
@@ -70,7 +70,7 @@ private:
     static const float pfira[64];               // 1st precalculated FIR lookup table
     static const float pfirb[64];               // 2nd precalculated FIR lookup table, also for bias correction
     static int instance_cnt;                    // used for decorrelation in case of multiple instances
-    int plfsr;                                  // linear feedback shift register
+    int plfsr;                                  // linear feedback shift 
     int pinc;                                   // increment for all noise sources (bits)
     int pdec;                                   // decrement for all noise sources
     float paccu;                                // accu, also interpreted as int

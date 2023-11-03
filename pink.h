@@ -20,12 +20,12 @@ class pink
 public: 
     void generate16(float *out)                 // generate 16 samples of pink noise
     {                                           // requires an adaptor if less are wanted
-        register int inc    =   pinc;           // load old fashioned register variables-
-        register int dec    =   pdec;           // as ugly as this might seem, it improves 
-        register floathack accu  =   paccu;          // the generated code for most compilers
-        register int lfsr   =   plfsr;
-        register int bit;
-        register float sample;
+         int inc    =   pinc;           // load old fashioned register variables-
+         int dec    =   pdec;           // as ugly as this might seem, it improves 
+         floathack accu  =   paccu;          // the generated code for most compilers
+         int lfsr   =   plfsr;
+         int bit;
+         float sample;
         
 #define PINK(bitmask)                    /* macro for processing:            */\
         bit = lfsr >> 31;                /* spill random to all bits         */\
