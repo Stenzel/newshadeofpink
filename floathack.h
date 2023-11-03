@@ -10,7 +10,7 @@
 
 struct floathack
 {
- 	float f;
+    float f;
     floathack(float a)             { f  = a; }
     void operator +=(const int b)  { f = std::bit_cast<float>(std::bit_cast<int>(f) + b);}
     operator float() const         {return f;}
