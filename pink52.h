@@ -18,11 +18,11 @@ class pink52
 public: 
     void generate16(float *out)                     // generate 16 samples of pink noise
     {                                               // requires an adaptor if less are wanted
-         long long inc  =   pinc;           // load old fashioned  variables-
-         long long dec  =   pdec;           // as ugly as this might seem, it seems to
-         long long accu =   paccu;          // improve code for most compilers.
-         long long lfsr =   plfsr;
-         long long bit;
+        long long inc  =   pinc;           // load old fashioned  variables-
+        long long dec  =   pdec;           // as ugly as this might seem, it seems to
+        long long accu =   paccu;          // improve code for most compilers.
+        long long lfsr =   plfsr;
+        long long bit;
             
                                                 
 #define PINK52(bitmask)              /* macro for processing:           */\

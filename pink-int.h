@@ -16,11 +16,11 @@ class pinkint
 public: 
     void generate16(short *out)                 // generate 16 samples of pink noise
     {
-         int inc    =   pinc;           // load old fashioned  variables-
-         int dec    =   pdec;           // as ugly as this might seem, it improves 
-         int accu   =   paccu;          // the generated code for most compilers
-         int lfsr   =   plfsr;
-         int bit;
+        int inc    =   pinc;           // load old fashioned  variables-
+        int dec    =   pdec;           // as ugly as this might seem, it improves 
+        int accu   =   paccu;          // the generated code for most compilers
+        int lfsr   =   plfsr;
+        int bit;
                                                 
 #define PINT(bitmask)                /* macro for processing:           */\
         bit = lfsr >> 31;            /* spill random to all bits        */\
