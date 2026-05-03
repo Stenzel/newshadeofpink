@@ -7,4 +7,4 @@ neither multiplication, division nor transcendental functions are used.
 
 This work is now public domain.
 Here is a detailed explanation with a live in-browser audio demo:
-https://www.dspbricks.com/articles/pink-noise/
+http://www.dspbricks.com/articles/pink-noise/
